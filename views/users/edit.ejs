@@ -1,40 +1,40 @@
 <% layout('layouts/boilerplate') %>
 <div class="container">
-  <h2>Thông tin nhân viên</h2>
-  <form action="/users/new" method="POST">
+  <h2>Cập nhật thông tin</h2>
+  <form action="/users/<%= currentUser._id%>?_method=PUT" method="POST">
     <div class="row mb-3">
       <div class="col-md-3">
-        <label for="username" class="form-label">Mã nhân viên</label>
-        <input type="text" class="form-control" id="username" name="username" />
+        <label for="code" class="form-label">Mã nhân viên</label>
+        <input type="text" class="form-control" id="code" name="info[code]" />
       </div>
       <div class="col-md-4">
         <label for="phone" class="form-label">Số điện thoại</label>
-        <input type="text" class="form-control" id="phone" name="contacts[phone]" />
+        <input type="text" class="form-control" id="phone" name="info[phone]" />
       </div>
       <div class="col-md-5">
         <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="contacts[email]" />
+        <input type="email" class="form-control" id="email" name="info[email]" />
       </div>
     </div>
     <div class="row mb-3">
       <div class="col-md-6">
         <label for="surname" class="form-label">Họ và tên đệm</label>
-        <input type="text" class="form-control" name="pi[name][surname]" />
+        <input type="text" class="form-control" name="info[surname]" />
       </div>
       <div class="col-md-6">
         <label for="name" class="form-label">Tên</label>
-        <input type="text" class="form-control" name="pi[name][name]" />
+        <input type="text" class="form-control" name="info[name]" />
       </div>
     </div>
     <div class="row mb-3">
       <div class="col-md-6">
         <label for="dob" class="form-label">Ngày sinh</label>
-        <input type="date" class="form-control" name="pi[dob]" />
+        <input type="date" class="form-control" name="info[dob]" />
       </div>
       <div class="col-md-6">
         <label for="gender" class="form-label">Giới tính</label>
-        <select class="form-select" id="gender" name="pi[gender]">
-          <option selected value="">Select Gender</option>
+        <select class="form-select" id="gender">
+          <option selected>Select Gender</option>
           <option value="male">Nam</option>
           <option value="female">Nữ</option>
           <option value="other">Khác</option>
@@ -44,19 +44,15 @@
     <div class="row mb-3">
       <div class="col-md-4">
         <label for="city" class="form-label">Tỉnh/Thành phố</label>
-        <input type="text" class="form-control" name="pi[location][city]" />
+        <input type="text" class="form-control" name="location[city]" />
       </div>
       <div class="col-md-4">
         <label for="district" class="form-label">Quận/Huyện</label>
-        <input type="text" class="form-control" name="pi[location][district]" />
+        <input type="text" class="form-control" name="location[district]" />
       </div>
       <div class="col-md-4">
         <label for="zipcode" class="form-label">Zipcode</label>
-        <input type="text" class="form-control" name="pi[location][zipcode]" />
-      </div>
-      <div>
-        <label for="address" class="form-label">Địa chỉ cụ thể</label>
-        <input type="text" class="form-control" name="pi[location][address]" />
+        <input type="text" class="form-control" name="location[zipcode]" />
       </div>
     </div>
     <div class="row mb-3">
@@ -67,10 +63,9 @@
             <input
               class="form-check-input"
               type="radio"
-              name="work[status]"
+              name="info[status]"
               id="active"
               value="true"
-              checked
             />
             <label class="form-check-label" for="active">Hoạt động</label>
           </div>
@@ -78,7 +73,7 @@
             <input
               class="form-check-input"
               type="radio"
-              name="work[status]"
+              name="info[status]"
               id="suspended"
               value="false"
             />
@@ -93,62 +88,25 @@
             <input
               class="form-check-input"
               type="radio"
-              name="work[job]"
-              id="ft"
+              name="info[job]"
+              id="active"
               value="ft"
-              checked
             />
-            <label class="form-check-label" for="ft">Full-time</label>
+            <label class="form-check-label" for="active">Full-time</label>
           </div>
           <div class="form-check form-check-inline">
             <input
               class="form-check-input"
               type="radio"
-              name="work[job]"
-              id="pt"
+              name="info[job]"
+              id="suspended"
               value="pt"
             />
-            <label class="form-check-label" for="pt">Part-time</label>
-          </div>
-        </div>
-      </div>
-      <div class="">
-        <label for="job" class="form-label">Quyền</label>
-        <div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="work[position]"
-              id="ad"
-              value="admin"
-            />
-            <label class="form-check-label" for="ad">Admin</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="work[position]"
-              id="hr"
-              value="hr"
-            />
-            <label class="form-check-label" for="hr">HR</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="work[position]"
-              id="nv"
-              value="nv"
-              checked
-            />
-            <label class="form-check-label" for="nv">Nhân viên</label>
+            <label class="form-check-label" for="suspended">Part-time</label>
           </div>
         </div>
       </div>
     </div>
-    <button class="btn btn-primary">Thêm nhân viên</button>
+    <button class="btn btn-primary">Cập nhật thông tin</button>
   </form>
 </div>

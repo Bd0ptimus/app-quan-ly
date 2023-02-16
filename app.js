@@ -80,9 +80,6 @@ app.get("/", (req,res) => {
 app.get("/home", (req, res) => {
   res.render("main/home");
 });
-app.get("/testroute", (req,res) => {
-  res.send("hello");
-}),
 app.use("/", authRoute);
 app.use("/users", hrRoutes);
 

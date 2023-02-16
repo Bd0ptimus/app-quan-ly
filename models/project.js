@@ -3,6 +3,11 @@ const { Schema } = mongoose;
 const memberSchema = new Schema({
     employee: {
         type: Schema.objectId,
+        reference: "User",
+        required: true,
+    },
+    level: {
+        type: Number,
         required: true,
     }
 })

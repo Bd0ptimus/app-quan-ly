@@ -21,16 +21,42 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const dbInit = async () => {
+const admin = {
+  contacts: {
+    phone: '0000000000',
+    email: "admin@gmail.com"
+  },
+  work: {
+    position: "admin",
+    job: "ft",
+    active: true
+  },
+  username: "admin",
+}
+
+const hr = {
+  contacts: {
+    phone: '1111111111',
+    email: "hr@gmail.com"
+  },
+  work: {
+    position: "hr",
+    job: "ft",
+    active: true
+  },
+  username: "hr",
+}
+
+const dbInit = async (admin,hr) => {
   await User.deleteMany({});
-  const admin = await User.register(
-    new User({ email: "admin@gmail.com", username: "admin", role: "admin" }),
+  const Admin = await User.register(
+    new User(admin),
     "1"
   );
   const HR = await User.register(
-    new User({ email: "hrEmp@gmail.com", username: "hrEmp", role: "admin" }),
+    new User(hr),
     "1"
   );
   
 };
-dbInit()
+dbInit(admin,hr);

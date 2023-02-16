@@ -1,1 +1,5 @@
 <% layout('layouts/boilerplate')%>
+<h1><%= currentUser.username %></h1>
+<form action="/logout" method="post">
+    <button class="btn btn-primary">Log out</button>
+</form>

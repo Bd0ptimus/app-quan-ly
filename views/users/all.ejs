@@ -1,0 +1,21 @@
+<%- layout('layouts/boilerplate') %>
+
+<ul style="list-style-type: none">
+  <% for(let user of all) { console.log(user)%>
+  <li>
+    <form action="/users/<%= user._id %>" id="<%= user._id %>form" method="get"></form>
+    <div class="card name-holder" id="<%= user._id %>">
+        <div class="card-body">
+            <p class="card-text"><%= user.username %></p>
+        </div>
+    </div>
+  </li>
+  <% } %>
+</ul>
+<script>
+    const holders = document.querySelectorAll(".name-holder");
+    for(let i of holders)
+        i.addEventListener('click', () => {
+            document.getElementById(i.id+'form').submit();
+        })
+</script>
