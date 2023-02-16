@@ -17,3 +17,11 @@ module.exports.createUser = wrapAsync(async (req, res) => {
   const { emp } = req.body;
   const newEmp = await User.register(new User(emp), "1");
 });
+
+
+
+
+
+
+
+
