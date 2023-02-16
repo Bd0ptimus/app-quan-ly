@@ -5,11 +5,12 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const UserSchema = new Schema({
   email: {
     type: String,
+    unique: true,
   },
   role: {
     type: String,
-    enum : ['admin', 'hr', 'employee'],
     default: 'employee',
+    enum : ['admin', 'hr', 'nv'],
   },
 });
 
