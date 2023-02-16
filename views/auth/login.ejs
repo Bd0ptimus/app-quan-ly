@@ -1,0 +1,43 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="row">
+  
+  <div class="col col-md-8 col-lg-6 offset-lg-3 offset-md-2">
+    <div class="card mt-5 py-3 px-5 bg-light text-dark">
+      <h1 class="text-center card-title">Log in</h1>
+      <form
+        action="/login"
+        class="needs-validation card-body"
+        method="POST"
+        novalidate
+      >
+        <div class="mb-3">
+          <label class="form-label" for="username">Username</label>
+          <input
+            class="form-control"
+            type="text"
+            id="username"
+            name="username"
+            required
+          />
+          <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="password">Password</label>
+          <input
+            class="form-control"
+            type="text"
+            id="password"
+            name="password"
+            required
+          />
+          <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-info">Log in</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- <script src="/javascripts/validateForms.js"></script> -->
+</div>
