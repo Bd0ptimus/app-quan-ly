@@ -11,7 +11,10 @@ module.exports.isActive = wrapAsync(async(req,res,next) => {
     return next();
   else {
     req.flash('error', "Tài khoản của bạn đã bị đình chỉ");
-    return res.redirect("/login");
+    return res.logout((e) => {
+      if (e) return next(e);
+      res.redirect("/login");
+    })
   }
 })
 module.exports.requestLogin = passport.authenticate("local", {

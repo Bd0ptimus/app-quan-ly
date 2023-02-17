@@ -1,58 +1,90 @@
 <% layout('layouts/boilerplate') %>
+
 <div class="container">
-  <h2>Cập nhật thông tin</h2>
-  <form action="/users/<%= currentUser._id%>?_method=PUT" method="POST">
-    <div class="row mb-3">
-      <div class="col-md-3">
-        <label for="code" class="form-label">Mã nhân viên</label>
-        <input type="text" class="form-control" id="code" name="info[code]" />
-      </div>
-      <div class="col-md-4">
-        <label for="phone" class="form-label">Số điện thoại</label>
-        <input type="text" class="form-control" id="phone" name="info[phone]" />
-      </div>
-      <div class="col-md-5">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="info[email]" />
-      </div>
-    </div>
+  <h2>Thay đổi thông tin</h2>
+  <form action="/users/<%= user._id  %>?_method=PUT" method="POST">
     <div class="row mb-3">
       <div class="col-md-6">
         <label for="surname" class="form-label">Họ và tên đệm</label>
-        <input type="text" class="form-control" name="info[surname]" />
+        <input
+          type="text"
+          class="form-control"
+          id="surname"
+          name="pi[name][surname]"
+          value="<%= pi.name.surname  %>"
+        />
       </div>
       <div class="col-md-6">
         <label for="name" class="form-label">Tên</label>
-        <input type="text" class="form-control" name="info[name]" />
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="pi[name][name]"
+          value="<%= pi.name.name %>"
+        />
       </div>
     </div>
     <div class="row mb-3">
       <div class="col-md-6">
         <label for="dob" class="form-label">Ngày sinh</label>
-        <input type="date" class="form-control" name="info[dob]" />
+        <input
+          type="date"
+          class="form-control"
+          id="dob"
+          name="pi[dob]"
+          value="<%= pi.dob %>"
+        />
       </div>
       <div class="col-md-6">
         <label for="gender" class="form-label">Giới tính</label>
-        <select class="form-select" id="gender">
-          <option selected>Select Gender</option>
-          <option value="male">Nam</option>
-          <option value="female">Nữ</option>
-          <option value="other">Khác</option>
+        <select
+          class="form-select"
+          id="gender"
+          name="pi[gender]"
+          value="<%= pi.gender  %>"
+        >
+          <option selected value="">-</option>
+          <option value="Nam">Nam</option>
+          <option value="Nữ">Nữ</option>
+          <option value="Khác">Khác</option>
         </select>
       </div>
     </div>
     <div class="row mb-3">
       <div class="col-md-4">
         <label for="city" class="form-label">Tỉnh/Thành phố</label>
-        <input type="text" class="form-control" name="location[city]" />
+        <input
+          type="text"
+          class="form-control"
+          id="city"
+          name="pi[location][city]"
+          value="<%= location.city  %>"
+        />
       </div>
       <div class="col-md-4">
         <label for="district" class="form-label">Quận/Huyện</label>
-        <input type="text" class="form-control" name="location[district]" />
+        <input
+          type="text"
+          class="form-control"
+          id="district"
+          name="pi[location][district]"
+          value="<%= location.district  %>"
+        />
       </div>
       <div class="col-md-4">
         <label for="zipcode" class="form-label">Zipcode</label>
-        <input type="text" class="form-control" name="location[zipcode]" />
+        <input
+          type="text"
+          class="form-control"
+          id="zipcode"
+          name="pi[location][zipcode]"
+          value="<%= location.zipcode  %>"
+        />
+      </div>
+      <div>
+        <label for="address" class="form-label">Địa chỉ</label>
+        <input type="text" class="form-control" name="pi[location][address]" value="<%= location.address  %>" />
       </div>
     </div>
     <div class="row mb-3">
@@ -63,9 +95,10 @@
             <input
               class="form-check-input"
               type="radio"
-              name="info[status]"
+              name="work[status]"
               id="active"
               value="true"
+              checked
             />
             <label class="form-check-label" for="active">Hoạt động</label>
           </div>
@@ -73,7 +106,7 @@
             <input
               class="form-check-input"
               type="radio"
-              name="info[status]"
+              name="work[status]"
               id="suspended"
               value="false"
             />
@@ -88,21 +121,58 @@
             <input
               class="form-check-input"
               type="radio"
-              name="info[job]"
-              id="active"
+              name="work[job]"
+              id="ft"
               value="ft"
+              checked
             />
-            <label class="form-check-label" for="active">Full-time</label>
+            <label class="form-check-label" for="ft">Full-time</label>
           </div>
           <div class="form-check form-check-inline">
             <input
               class="form-check-input"
               type="radio"
-              name="info[job]"
-              id="suspended"
+              name="work[job]"
+              id="pt"
               value="pt"
             />
-            <label class="form-check-label" for="suspended">Part-time</label>
+            <label class="form-check-label" for="pt">Part-time</label>
+          </div>
+        </div>
+      </div>
+      <div class="">
+        <label for="job" class="form-label">Quyền</label>
+        <div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="work[position]"
+              id="ad"
+              value="admin"
+            />
+            <label class="form-check-label" for="ad">Admin</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="work[position]"
+              id="hr"
+              value="hr"
+            />
+            <label class="form-check-label" for="hr">HR</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="work[position]"
+              id="nv"
+              value="nv"
+              checked
+            />
+            <label class="form-check-label" for="nv">Nhân viên</label>
           </div>
         </div>
       </div>

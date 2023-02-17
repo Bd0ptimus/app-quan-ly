@@ -1,25 +1,59 @@
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow row g-0">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/home">i-TechCo</a>
-  <button
-    class="navbar-toggler position-absolute d-md-none collapsed"
-    type="button"
-    data-bs-toggle="collapse"
-    data-bs-target="#sidebarMenu"
-    aria-controls="sidebarMenu"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="col-md-6 col-lg-8 ms-0">
-    <input
-    class="form-control form-control-dark w-100"
-    type="text"
-    placeholder="Search"
-    aria-label="Search"
-  />
-  </div>  
-  <div class="col-md-3 col-lg-8"></div>
-
-
-</header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">i-Techco</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDarkDropdown"
+      aria-controls="navbarNavDarkDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse d-lg-flex flex-row-reverse bd-highlight"
+      id="navbarNavDarkDropdown"
+    >
+      <% if(currentUser) { %>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDarkDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-dark dropdown-menu-end p-0"
+            aria-labelledby="navbarDarkDropdownMenuLink"
+          >
+            <li>
+              <div class="card bg-light bg-lg-dark" style="width: 18rem">
+                <div class="card-body row">
+                  <div class="col-6">
+                    <a href="/users/<%= currentUser._id %>" class="btn btn-sm btn-dark">Hồ sơ</a>
+                  </div>
+                  <div class="col-6 d-flex flex-row-reverse">
+                    <form action="/logout" method="post" id="logout"></form>
+                    <button
+                      class="btn btn-sm btn-dark"
+                      onclick="document.querySelector('#logout').submit()"
+                    >
+                      Đăng xuất
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <% } %>
+    </div>
+  </div>
+</nav>

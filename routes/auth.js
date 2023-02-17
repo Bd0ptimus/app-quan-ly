@@ -9,7 +9,7 @@ const {
   logOut,
 } = require("../controllers/auth");
 
-router.route("/login").get(renderLogin).post(isActive,requestLogin, returnHome);
+router.route("/login").get(renderLogin).post(requestLogin, isActive, returnHome);
 
 router.route("/logout").post(logOut);
 

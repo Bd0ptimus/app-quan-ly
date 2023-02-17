@@ -2,41 +2,65 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const passportLocalMongoose = require("passport-local-mongoose");
 
-const UserSchema = new Schema({
-  contacts: {
-    email: {
+const contactSchema = new Schema({
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+    default: '0000000000',
+  },
+})
+const piSchema = new Schema({
+  name:{
+    surname: {
       type: String,
+      default: 'User'
     },
-    phone: {
+    name: {
       type: String,
+      default: ''
+    }
+  },
+  dob: {
+    type: String,
+    default: ''
+  },
+  gender: {
+    type: String,
+    default: ''
+  },
+  location: {
+    city: {
+      type: String,
+      default: ''
+    },
+    district: {
+      type: String,
+      default: ''
+    },
+    zipcode: {
+      type: String,
+      default: ''
+    },
+    address: {
+      type: String,
+      default: ''
     },
   },
-  pi: {
-    name:{
-      surname: {
-        type: String,
-      },
-      name: {
-        type: String,
-      }
-    },
-    dob: {
-      type: String,
-    },
-    gender: {
-      type: String,
-    },
-    location: {
-      city: {
-        type: String,
-      },
-      district: {
-        type: String,
-      },
-      address: {
-        type: String,
-      },
-    },
+})
+piSchema.virtual("fullname").get(function() {
+  return this.name.surname + ' ' + this.name.name;
+})
+piSchema.virtual("fullLocation").get(function() {
+  return this.location.address + ', ' + this.location.district + ', ' + this.location.city;
+})
+const UserSchema = new Schema({
+  contacts: contactSchema,
+  pi: piSchema,
+  initDate:{
+    type: String,
+    immutable: true,
   },
   work: {
     position: {
@@ -52,6 +76,13 @@ const UserSchema = new Schema({
       type: String,
       enum: ["ft", "pt"],
     },
+  },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    immutable: true,
+    // Make the field read-only by setting a getter function that always returns the same value
   }
 });
 

@@ -1,21 +1,30 @@
 <%- layout('layouts/boilerplate') %>
-
-<ul style="list-style-type: none">
-  <% for(let user of all) { console.log(user)%>
-  <li>
-    <form action="/users/<%= user._id %>" id="<%= user._id %>form" method="get"></form>
-    <div class="card name-holder" id="<%= user._id %>">
-        <div class="card-body">
-            <p class="card-text"><%= user.username %></p>
-        </div>
+<div class="container mt-5">
+  <h1>Nhân viên</h1>
+  <div class="card">
+    <div class="card-body table-responsive">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Họ & tên</th>
+            <th>Bắt đầu làm việc</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let user of all) {%>
+            <tr>
+              <td><%= all.indexOf(user) + 1 %></td>
+              <td><%= user.pi.fullname %></td>
+              <td><%= user.initDate %></td>
+              <td class="d-flex justify-content-center">
+                <a href="/users/<%= user._id %>" class="btn btn-success">Hồ sơ</a>
+              </td>
+            </tr>
+            <% } %>
+        </tbody>
+      </table>
     </div>
-  </li>
-  <% } %>
-</ul>
-<script>
-    const holders = document.querySelectorAll(".name-holder");
-    for(let i of holders)
-        i.addEventListener('click', () => {
-            document.getElementById(i.id+'form').submit();
-        })
-</script>
+  </div>
+</div>
