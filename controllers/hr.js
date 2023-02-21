@@ -46,9 +46,34 @@ module.exports.renderEdit = wrapAsync(async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id);
   const { contacts, pi, work } = user;
+  let allowedEditPi = false;
+  if(req.user.work.position === 'admin' || req.user.work.position === 'hr')
+    allowedEditPi = true;
   const dob = dateToObj(pi.dob);
-  res.render("users/edit", { pi,contacts,user, work, location: pi.location });
+  res.render("users/edit2", { pi,contacts,user, work, location: pi.location, allowedEditPi });
 });
+module.exports.editPw = wrapAsync(async(req,res) => {
+  const {current_pw, new_pw, new_pw_confirm} = req.body;
+  const {id} = req.params;
+  const failedValidation = (msg) => {
+    req.flash('error', msg);
+  }
+  if(new_pw !== new_pw_confirm){
+    failedValidation('Nhập lại mật khẩu không đúng');
+    return res.redirect(`/users/${id}/edit`);
+  }
+  const user = await User.findById(id);
+  user.changePassword(current_pw, new_pw, (err) => {
+    if(err)
+    {
+      failedValidation('Mật khẩu không chính xác');
+      return res.redirect(`/users/${id}/edit`);
+    }
+    req.flash('success', "Đổi mật khẩu thành công");
+    res.redirect(`/users/${id}/edit`);
+  })
+  
+})
 
 module.exports.pushEdit = wrapAsync(async (req, res) => {
   const { id } = req.params;

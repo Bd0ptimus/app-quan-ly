@@ -8,6 +8,7 @@ const {
   renderEdit,
   pushEdit,
   showEmployees,
+  editPw
 } = require("../controllers/hr");
 
 router.route("/").get(showEmployees);
@@ -17,5 +18,7 @@ router
   .post(checkCredentials, createUser);
 router.route("/:id/").get(renderProfile).put(checkCredentials, pushEdit);
 
-router.route("/:id/edit").get(checkCredentials, renderEdit);
+router.route("/:id/edit").get(renderEdit);
+
+router.post('/:id/pw', editPw);
 module.exports = router;

@@ -88,6 +88,6 @@ app.use((err, req, res, next) => {
   if (!err.message) err.message = "Oops, something went wrong!";
   res.status(status).render("error", { err });
 });
-app.listen(4000, () => {
-  console.log("Serving on port 4000");
+app.listen(3000, () => {
+  console.log("Serving on port 3000");
 });
