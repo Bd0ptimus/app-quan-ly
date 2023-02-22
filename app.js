@@ -15,6 +15,8 @@ const MongoStore = require("connect-mongo");
 const { isLoggedIn } = require("./utils/middlewares");
 const authRoute = require("./routes/auth");
 const hrRoutes = require('./routes/hrRoutes');
+const homeRoutes = require("./routes/home");
+const projectRoutes = require("./routes/projects")
 mongoose.connect("mongodb://127.0.0.1:27017/i-techco", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -77,11 +79,11 @@ app.use((req, res, next) => {
 app.get("/", (req,res) => {
   res.redirect('/home');
 })
-app.get("/home", (req, res) => {
-  res.render("main/home");
-});
+
 app.use("/", authRoute);
 app.use("/users", hrRoutes);
+app.use('/projects', projectRoutes);
+app.use("/home", homeRoutes);
 
 app.use((err, req, res, next) => {
   const { status = 500 } = err;

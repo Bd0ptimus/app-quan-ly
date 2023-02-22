@@ -1,38 +1,52 @@
+const { number } = require("joi");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const memberSchema = new Schema({
-    employee: {
-        type: Schema.objectId,
-        reference: "User",
-        required: true,
+
+const taskSchema = new Schema({
+    title: {
+        type: String,
     },
-    level: {
+    comment: {
+        type: String,
+        default: '',
+    },
+    progress: {
         type: Number,
-        required: true,
+        max: 100,
+        min: 0,
+        default: 0
     }
 })
 const projectSchema = new Schema({
     title: {
         type: String,
     },
+    tasks: [
+        taskSchema
+    ],
     description: {
         type: String,
-    }, 
-    creator: {
-        type: Schema.objectId,
-        reference: "User",
-        required: true,
     },
-    type:{
-        level: {
-            type: Number,
-            required: true,
-        },
-        parent: {
-            type: Schema.objectId,
-            reference: "Project"
-        },
-    },members: [memberSchema]
+    progress: {
+        type: Number,
+        max: 100,
+        min: 0,
+        default: 0,
+    },
+    spendings: {
+        type: Number,
+        min: 0,
+    },
+    created: {
+        type: String,
+    },
+    deadline: {
+        type: String,
+    },
+    leader: {
+        type: mongoose.ObjectId,
+        ref: 'Users'
+    },
 })
 
 const Project = mongoose.model("Project", projectSchema);

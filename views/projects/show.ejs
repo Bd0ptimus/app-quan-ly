@@ -1,0 +1,57 @@
+<% layout('layouts/boilerplate') %>
+<h3 class="mt-5 mb-3">Chi tiết dự án</h3>
+<div class="container row g-2">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header d-flex flex-row justify-content-between pt-3">
+        <div><h3 class="card-title"><%= project.title %></h3></div>
+        <div class="dropdown">
+          <button
+            class="btn btn-light dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          ></button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <a class="dropdown-item" href="/projects/<%= project._id %>/edit"
+                >Chỉnh sửa</a
+              >
+            </li>
+            <li><a class="dropdown-item" href="#">Xóa</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card-body mt-3">
+        <h5 class="card-subtitle mb-2">Nội dung:</h5>
+        <p class="card-text mb-5"><%= project.description %></p>
+        <div class="row">
+          <div class="col-md-4">
+            <label for="start">Bắt đầu:</label>
+            <p id="start"><%= project.created %></p>
+          </div>
+          <div class="col-md-4">
+            <label for="end">Deadline:</label>
+            <p id="end"><%= project.deadline %></p>
+          </div>
+          <div class="col-md-4">
+            <label for="spendings">Chi tiêu:</label>
+            <p id="start"><%= project.spendings %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header d-flex flex-row justify-content-between pt-3">
+        <h3 class="card-title">Công việc</h3>
+      </div>
+      <div class="card-body">
+        
+      </div>
+    </div>
+  </div>
+</div>

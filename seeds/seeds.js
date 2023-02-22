@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const mongoose = require("mongoose");
 const User = require("../models/users");
+const Strat = require("../models/strat");
 const app = express();
 
 mongoose.connect("mongodb://127.0.0.1:27017/i-techco", {
@@ -60,7 +61,13 @@ const hr = {
 
 const dbInit = async (admin, hr) => {
   await User.deleteMany({});
+  await Strat.deleteMany({});
   const Admin = await User.register(new User(admin), "1");
   const HR = await User.register(new User(hr), "1");
+  const strat = new Strat({
+    title: "(Chiến lược)",
+    content: "(Nội dung)"
+  })
+  await strat.save();
 };
 dbInit(admin, hr);
