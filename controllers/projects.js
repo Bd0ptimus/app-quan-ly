@@ -1,18 +1,19 @@
 const Project = require("../models/project");
+const Task = require("../models/tasks");
+const {getCurrentDate} = require("../utils/helpers");
 const wrapAsync = require("../utils/wrapAsync")
 const appError = require("../utils/appError");
 
+
 module.exports.renderNew = (req,res) => {
-    res.render("projects/new");
+    res.render("projects/new", {created: getCurrentDate()});
 }
 module.exports.renderProject = wrapAsync(async (req,res) => {
     const {id} = req.params;
-    const project = await Project.findById(id);
+    const project = await Project.findById(id).populate('tasks').lean({ virtuals: true });
     console.log(project);
-    if(!project){
-        throw new appError(404, "Đường dẫn không tồn tại");
-    }
-    res.render("projects/show", {project});
+    const {tasks} = project;
+    res.render("projects/show", {project, tasks});
 
 })
 module.exports.checkCredentials = (req,res,next) => {
@@ -31,4 +32,41 @@ module.exports.createProject = wrapAsync(async (req,res) => {
     console.log(project);
     await project.save();
     res.redirect(`/projects/${project._id}`);
+})
+module.exports.postTask = wrapAsync(async (req,res) => {
+    const {id} = req.params;
+    const body = req.body;
+    const project = await Project.findById(id).populate('tasks');
+
+    console.log(project);
+    const task = new Task(body);
+    task.project = id;
+    task.created = getCurrentDate();
+    console.log(task);
+    await task.save();
+    project.tasks.push(task._id);
+    console.log(project);
+    await project.save()
+    
+    res.redirect(`/projects/${id}`);
+})
+
+module.exports.deleteProject = wrapAsync(async(req,res) => {
+    const {id} = req.params;
+    const project = await Project.findByIdAndDelete(id);
+    console.log(project);
+    res.redirect("/manage");
+})
+
+module.exports.renderEdit = wrapAsync(async(req,res) => {
+    const {id} = req.params;
+    const project = await Project.findById(id);
+    res.render("projects/edit", {project});
+})
+
+module.exports.editProject = wrapAsync(async(req,res) => {
+    const {id} = req.params;
+    const body = req.body;
+    const project = await Project.findByIdAndUpdate(id, body);
+    res.redirect(`/projects/${id}`);
 })

@@ -2,6 +2,8 @@ const express = require("express");
 const passport = require("passport");
 const mongoose = require("mongoose");
 const User = require("../models/users");
+const Project = require("../models/project")
+const Task = require("../models/tasks");
 const Strat = require("../models/strat");
 const app = express();
 
@@ -62,6 +64,8 @@ const hr = {
 const dbInit = async (admin, hr) => {
   await User.deleteMany({});
   await Strat.deleteMany({});
+  await Project.deleteMany({});
+  await Task.deleteMany({});
   const Admin = await User.register(new User(admin), "1");
   const HR = await User.register(new User(hr), "1");
   const strat = new Strat({

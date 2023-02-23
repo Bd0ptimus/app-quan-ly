@@ -1,0 +1,217 @@
+<%- layout('layouts/boilerplate') %>
+
+<h3 class="mt-5 mb-3">
+  <a href="/manage#projectTable" class="tree-menu-link">Quản lý</a>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="bi bi-caret-right-fill"
+    viewBox="0 0 16 16"
+  >
+    <path
+      d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"
+    />
+  </svg>
+  <a class="tree-menu-link" href="/projects/<%= task.project._id.toString() %>"
+    ><%= task.project.title %></a
+  >
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="bi bi-caret-right-fill"
+    viewBox="0 0 16 16"
+  >
+    <path
+      d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"
+    />
+  </svg>
+  <%= task.title %>
+</h3>
+<div class="container row g-2">
+  <div class="col-md-6 col-lg-8">
+    <div class="card">
+      <div class="card-header d-flex flex-row justify-content-between pt-3">
+        <div>
+          <h3 class="card-title"><%= task.title %></h3>
+          <% const completed = task.progress == 100? true:false %>
+          <div class="badge bg-<%= completed? 'success':'secondary' %> mb-3">
+            <%= completed? 'Đã hoàn thành':'Chưa hoàn thành' %>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button
+            class="btn btn-light dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          ></button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <a
+                class="dropdown-item"
+                data-bs-toggle="modal"
+                data-bs-target="#editFormHolder"
+                >Chỉnh sửa</a
+              >
+            </li>
+            <li>
+              <form
+                action="/tasks/<%= task._id %>?_method=delete"
+                method="POST"
+              ></form>
+              <a
+                class="dropdown-item"
+                onclick="this.previousElementSibling.submit()"
+                >Xóa</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-body mt-3">
+        <h5 class="card-subtitle mb-2">Nội dung:</h5>
+        <p class="card-text mb-5"><%= task.content %></p>
+        <div class="row">
+          <div class="col-md-4">
+            <label for="start">Bắt đầu:</label>
+            <p id="start"><%= task.created %></p>
+          </div>
+          <div class="col-md-4">
+            <label for="end">Deadline:</label>
+            <p id="end"><%= task.deadline %></p>
+          </div>
+        </div>
+      </div>
+      <div class="p-3">
+        <!-- project progress-->
+        <p class="mb-2">
+          Tiến độ:
+          <span class="float-end"><%= task.progress %>%</span>
+        </p>
+        <div class="progress progress-sm">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            aria-valuenow="100"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            style="width: <%= task.progress %>%"
+          ></div>
+          <!-- /.progress-bar -->
+        </div>
+        <!-- /.progress -->
+      </div>
+      <div class="card-body my-3">
+        <h5 class="card-subtitle mb-2">Đánh giá:</h5>
+        <p class="card-text"><%= task.comment %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header d-flex flex-row justify-content-between pt-3">
+        <h3 class="card-title">Đánh giá</h3>
+      </div>
+      <div class="card-body">
+        <form action="/tasks/<%= task._id %>" method="post">
+          <div class="mb-3">
+            <label for="comment" class="col-form-label">Đánh giá</label>
+            <textarea class="form-control" id="comment" name="comment">
+<%= task.comment %></textarea
+            >
+          </div>
+          <div class="mb-3">
+            <output>Tiến độ: <%= task.progress %>%</output>
+            <input
+              type="range"
+              class="form-range"
+              id="progress"
+              name="progress"
+              min="0"
+              max="100"
+              value="<%= task.progress %>"
+              oninput="this.previousElementSibling.value = `Tiến độ: ${this.value}%`"
+            />
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-primary">Đánh giá</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="editFormHolder"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Chỉnh sửa</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          action="/tasks/<%= task._id.toString() %>?_method=put"
+          method="POST" id="editForm"
+        >
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Chủ đề</label>
+            <input
+              type="text"
+              class="form-control"
+              id="recipient-name"
+              name="title"
+              value="<%= task.title %>"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Nội dung</label>
+            <textarea
+              name="content"
+              class="form-control"
+              id=""
+              cols="30"
+              rows="10"
+            >
+<%= task.content %></textarea
+            >
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Deadline</label>
+            <input
+              type="date"
+              class="form-control"
+              id="recipient-name"
+              name="deadline"
+              value="<%= task.deadline %>"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Đóng
+        </button>
+        <button type="button" class="btn btn-primary"
+        onclick="document.getElementById('editForm').submit()">Cập nhật</button>
+      </div>
+    </div>
+  </div>
+</div>

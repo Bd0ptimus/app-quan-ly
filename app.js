@@ -1,5 +1,8 @@
 require("dotenv").config();
 
+
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 const express = require("express");
 const passport = require("passport");
 const path = require("path");
@@ -15,8 +18,10 @@ const MongoStore = require("connect-mongo");
 const { isLoggedIn } = require("./utils/middlewares");
 const authRoute = require("./routes/auth");
 const hrRoutes = require('./routes/hrRoutes');
-const homeRoutes = require("./routes/home");
+const manageRoutes = require("./routes/manage");
 const projectRoutes = require("./routes/projects")
+const taskRoutes = require("./routes/tasks");
+
 mongoose.connect("mongodb://127.0.0.1:27017/i-techco", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -81,15 +86,29 @@ app.get("/", (req,res) => {
 })
 
 app.use("/", authRoute);
+app.get('/home', (req,res) => {
+  res.render("main/home");
+})
+
+
 app.use("/users", hrRoutes);
 app.use('/projects', projectRoutes);
-app.use("/home", homeRoutes);
+app.use("/manage", manageRoutes);
+app.use("/tasks", taskRoutes);
 
 app.use((err, req, res, next) => {
   const { status = 500 } = err;
   if (!err.message) err.message = "Oops, something went wrong!";
   res.status(status).render("error", { err });
 });
-app.listen(3000, () => {
-  console.log("Serving on port 3000");
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+
+})
+httpServer.listen(3000, () => {
+  console.log("yay")
 });
+// app.listen(3000, () => {
+//   console.log("Serving on port 3000");
+// });

@@ -48,7 +48,7 @@ const piSchema = new Schema({
       default: ''
     },
   },
-})
+}, {toJSON :{virtuals: true}})
 piSchema.virtual("fullname").get(function() {
   return this.name.surname + ' ' + this.name.name;
 })
@@ -84,7 +84,7 @@ const UserSchema = new Schema({
     immutable: true,
     // Make the field read-only by setting a getter function that always returns the same value
   }
-});
+}, {toJSON :{virtuals: true}});
 
 UserSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("User", UserSchema);

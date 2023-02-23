@@ -1,37 +1,21 @@
-const { number } = require("joi");
+
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const Task = require("./tasks");
+const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 
-const taskSchema = new Schema({
-    title: {
-        type: String,
-    },
-    comment: {
-        type: String,
-        default: '',
-    },
-    progress: {
-        type: Number,
-        max: 100,
-        min: 0,
-        default: 0
-    }
-})
 const projectSchema = new Schema({
     title: {
         type: String,
     },
     tasks: [
-        taskSchema
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Task'
+        }    
     ],
     description: {
         type: String,
-    },
-    progress: {
-        type: Number,
-        max: 100,
-        min: 0,
-        default: 0,
     },
     spendings: {
         type: Number,
@@ -47,9 +31,30 @@ const projectSchema = new Schema({
         type: mongoose.ObjectId,
         ref: 'Users'
     },
-})
+}, { toJSON: { virtuals: true } })
 
-const Project = mongoose.model("Project", projectSchema);
+projectSchema.plugin(mongooseLeanVirtuals);
+
+projectSchema.virtual('progress').get(function() {
+    if (this.tasks.length === 0) {
+      return 0;
+    }
+    const totalProgress = this.tasks.reduce((total, task) => total + task.progress, 0);
+    return Math.round(totalProgress / this.tasks.length);
+  });
+
+projectSchema.post("findOneAndDelete", async function (doc) {
+    if (doc) {
+      await Task.deleteMany({
+        _id: {
+          $in: doc.tasks,
+        },
+      });
+    }
+  });
+
+const Project = mongoose.model("Project", projectSchema)
 module.exports = Project;
+
 
 

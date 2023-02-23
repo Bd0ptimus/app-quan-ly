@@ -1,7 +1,7 @@
 const wrapAsync = require("../utils/wrapAsync");
 const Strat = require("../models/strat");
-
-
+const Project = require('../models/project');
+const User = require("../models/users");
 module.exports.renderHome = wrapAsync(async (req,res) => {
     const strats = await Strat.find();
     let strat = {};
@@ -12,8 +12,9 @@ module.exports.renderHome = wrapAsync(async (req,res) => {
     else {
         strat = strats[0];
     }
-    console.log(strat);
-    res.render('main/home', {strat});
+    const projects = await Project.find().populate("tasks").lean({virtuals: true});
+    const all = await User.find();
+    res.render('main/manage', {strat, projects, all});
 })
 module.exports.isAuthorized = (req,res,next) => {
     const {work} = req.user;

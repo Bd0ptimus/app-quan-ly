@@ -1,10 +1,31 @@
 <% layout('layouts/boilerplate') %>
-<h3 class="mt-5 mb-3">Chi tiết dự án</h3>
+<h3 class="mt-5 mb-3">
+  <a href="/manage#projectTable" class="tree-menu-link">Quản lý</a
+  > <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="bi bi-caret-right-fill"
+    viewBox="0 0 16 16"
+  >
+    <path
+      d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"
+    />
+  </svg>
+  <%= project.title %>
+</h3>
 <div class="container row g-2">
-  <div class="col-md-6">
+  <div class="col-md-6 col-lg-8">
     <div class="card">
       <div class="card-header d-flex flex-row justify-content-between pt-3">
-        <div><h3 class="card-title"><%= project.title %></h3></div>
+        <div>
+          <h3 class="card-title"><%= project.title %></h3>
+          <% const completed = project.progress == 100? true:false %>
+          <div class="badge bg-<%= completed? 'success':'secondary' %> mb-3">
+            <%= completed? 'Đã hoàn thành':'Chưa hoàn thành' %>
+          </div>
+        </div>
         <div class="dropdown">
           <button
             class="btn btn-light dropdown-toggle"
@@ -19,7 +40,17 @@
                 >Chỉnh sửa</a
               >
             </li>
-            <li><a class="dropdown-item" href="#">Xóa</a></li>
+            <li>
+              <form
+                action="/projects/<%= project._id %>?_method=delete"
+                method="POST"
+              ></form>
+              <a
+                class="dropdown-item"
+                onclick="this.previousElementSibling.submit()"
+                >Xóa</a
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -43,15 +74,88 @@
         </div>
       </div>
     </div>
+    <div class="card" <%= tasks.length? '':'hidden' %>>
+    <div class="card-body">
+      <% for(let task of tasks) {%>
+      <div class="row justify-content-sm-between">
+        <div class="col-sm-6 mb-2 mb-sm-0">
+          <label for="" class="ms-2"
+            ><a href="/tasks/<%= task._id %>" class="tree-menu-link"
+              ><%= task.title %></a
+            >
+          </label>
+          <% const taskCompleted = task.progress == 100? true:false %>
+          <div
+            class="badge bg-<%= taskCompleted? 'success':'secondary' %> ms-3"
+          >
+            <%= taskCompleted? 'Đã hoàn thành':'Chưa hoàn thành' %>
+          </div>
+          <!-- end checkbox -->
+        </div>
+        <!-- end col -->
+        <div class="col-sm-6">
+          <div class="d-flex justify-content-between">
+            <div>
+              <ul class="list-inline font-13">
+                <li class="list-inline-item">Tạo: <%= task.created %></li>
+                <li class="list-inline-item">Deadline: <%= task.deadline %></li>
+              </ul>
+            </div>
+          </div>
+          <!-- end .d-flex-->
+        </div>
+        <div class="p-3 mb-0">
+          <!-- project progress-->
+          <p class="mb-2">
+            Tiến độ:
+            <span class="float-end"><%= task.progress %>%</span>
+          </p>
+          <div class="progress progress-sm">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="100"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              style="width: <%= task.progress %>%"
+            ></div>
+            <!-- /.progress-bar -->
+          </div>
+          <!-- /.progress -->
+        </div>
+        <!-- end col -->
+      </div>
+      <hr />
+      <% } %>
+    </div>
   </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header d-flex flex-row justify-content-between pt-3">
-        <h3 class="card-title">Công việc</h3>
-      </div>
-      <div class="card-body">
-        
-      </div>
+</div>
+<div class="col-md-6 col-lg-4">
+  <div class="card">
+    <div class="card-header d-flex flex-row justify-content-between pt-3">
+      <h3 class="card-title">Nhiệm vụ</h3>
+    </div>
+    <div class="card-body">
+      <form action="/projects/<%= project._id %>/tasks" method="POST">
+        <div class="mb-3">
+          <label for="recipient-name" class="col-form-label">Chủ đề</label>
+          <input type="text" class="form-control" id="title" name="title" />
+        </div>
+        <div class="mb-3">
+          <label for="message-text" class="col-form-label">Nội dung</label>
+          <textarea class="form-control" id="content" name="content"></textarea>
+        </div>
+        <div class="mb-3 position-relative" id="datepicker2">
+          <label for="deadline" class="form-label">Deadline</label>
+          <input
+            type="date"
+            id="deadline"
+            class="form-control"
+            name="deadline"
+          />
+        </div>
+        <button class="btn btn-primary">Thêm nhiệm vụ</button>
+      </form>
     </div>
   </div>
 </div>
